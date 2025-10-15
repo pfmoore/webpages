@@ -134,9 +134,15 @@
     }
     
     @media (max-width: 600px) {
+      /* Don't switch to one-per-line for buttons.
+       * I'm not sure what the logic is for doing so, but
+       * it wastes valuable screen space.
+       */
+      /*
       .buttons-row {
         flex-direction: column;
       }
+      */
       
       .options-grid {
         grid-template-columns: repeat(2, 1fr);
