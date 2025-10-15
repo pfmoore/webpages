@@ -13,32 +13,6 @@
       --highlight: #3498db;
     }
 
-.background {
-  position: relative;
-  background-image: url('https://images.wallpaperscraft.com/image/single/chess_pieces_board_204643_2048x1152.jpg'); /* path to image 5 */
-  background-size: cover;
-  background-position: center;
-  /*height: 100vh; /* or whatever size you want */
-}
-
-.background::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-color: #2c3e50; /* your slate blue */
-  opacity: 0.6; /* adjust tint strength (0 = invisible, 1 = full color) */
-  z-index: 1;
-}
-
-/* Optional: Place content inside a wrapper so it's above the overlay */
-.background-content {
-  position: relative;
-  z-index: 2;
-  color: white;
-  padding: 2rem;
-}
-
-
     html, body {
       margin: 0;
       padding: 0;
@@ -178,11 +152,7 @@
 </head>
 <body>
   <header>
-  <div class="background">
-    <div class="background-content">
-        <h2>Welcome to Monaco!</h2>
-      </div>
-    </div>
+    <h2>Welcome to Monaco!</h2>
   </header>
     
     <div class="container">
