@@ -238,61 +238,60 @@
     <h2>Welcome to Monaco!</h2>
   </header>
     
-    <div class="container">
-      
-      <!-- Checkbox Options Grid -->
-      <div class="options-grid" id="checkboxes">
-        <div class="option-item">
-          <label><input type="checkbox" id="-exact" value="-exact" onclick="deselect_sibling(this, '-new')"/> -exact</label>
-          <label><input type="checkbox" id="-new" value="-new" onclick="deselect_sibling(this, '-exact')"/> -new</label>
-        </div>
-        <div class="option-item">
-          <label><input type="checkbox" id="-statistics" value="-statistics" onclick="deselect_sibling(this, '+statistics')"/> -statistics</label>
-          <label><input type="checkbox" id="+statistics" value="+statistics" onclick="deselect_sibling(this, '-statistics')"/> +statistics</label>
-        </div>
-        <div class="option-item"><label><input type="checkbox" value="-table" /> -table</label></div>
-        <div class="option-item"><label><input type="checkbox" value="-histogram" /> -histogram</label></div>
-        <div class="option-item"><label><input type="checkbox" value="-cumulative" /> -cumulative</label></div>
-        <div class="option-item"><label><input type="checkbox" value="-rcumulative" /> -rcumulative</label></div>
-        <div class="option-item"><label><input type="checkbox" value="-probability" /> -probability</label></div>
-        <div class="option-item"><label><input type="checkbox" value="-percent" /> -percent</label></div>
-        <div class="option-item"><label><input type="checkbox" value="-version -size +date" /> Program Info</label></div>
+  <div class="container">
+    
+    <!-- Checkbox Options Grid -->
+    <div class="options-grid" id="checkboxes">
+      <div class="option-item">
+        <label><input type="checkbox" id="-exact" value="-exact" onclick="deselect_sibling(this, '-new')"/> -exact</label>
+        <label><input type="checkbox" id="-new" value="-new" onclick="deselect_sibling(this, '-exact')"/> -new</label>
       </div>
+      <div class="option-item">
+        <label><input type="checkbox" id="-statistics" value="-statistics" onclick="deselect_sibling(this, '+statistics')"/> -statistics</label>
+        <label><input type="checkbox" id="+statistics" value="+statistics" onclick="deselect_sibling(this, '-statistics')"/> +statistics</label>
+      </div>
+      <div class="option-item"><label><input type="checkbox" value="-table" /> -table</label></div>
+      <div class="option-item"><label><input type="checkbox" value="-histogram" /> -histogram</label></div>
+      <div class="option-item"><label><input type="checkbox" value="-cumulative" /> -cumulative</label></div>
+      <div class="option-item"><label><input type="checkbox" value="-rcumulative" /> -rcumulative</label></div>
+      <div class="option-item"><label><input type="checkbox" value="-probability" /> -probability</label></div>
+      <div class="option-item"><label><input type="checkbox" value="-percent" /> -percent</label></div>
+      <div class="option-item"><label><input type="checkbox" value="-version -size +date" /> Program Info</label></div>
+    </div>
+    
+    <!-- Input Fields with Labels -->
+    <div class="inputs-row">
+      <label>
+        Options
+        <input type="text" id="options" placeholder="Options" />
+      </label>
       
-      <!-- Input Fields with Labels -->
-      <div class="inputs-row">
-        <label>
-          Options
-          <input type="text" id="options" placeholder="Options" />
-        </label>
-        
-        <label>
-          Expression
-          <textarea id="expression" placeholder="Expression"></textarea>
-        </label>
-        
-        <label>
-          Number
-          <input id="number" type="text" placeholder="Number" />
-        </label>
-    </div>
-    
-    <!-- Buttons -->
-    <div class="buttons-row">
-      <button onclick="submit_calculation()">Calculate</button>
-      <button onclick="clear_output()">Clear</button>
-      <button onclick="open_help()">Help</button> <!-- https://webmonaco.fly.dev/help -->
-    </div>
-    
-    <!-- Output Areas -->
-    <div id="progress" class=""></div>
-    <div id="notifications" class="hidden"></div>
-
-    <pre class="output" id="stdout">Program output appears here</pre>
-    <pre class="output" id="stderr">Errors and warnings appear here</pre>
-    <pre class="output" id="command">Command file appears here</pre>
-    
+      <label>
+        Expression
+        <textarea id="expression" placeholder="Expression"></textarea>
+      </label>
+      
+      <label>
+        Number
+        <input id="number" type="text" placeholder="Number" />
+      </label>
   </div>
+  
+  <!-- Buttons -->
+  <div class="buttons-row">
+    <button onclick="submit_calculation()">Calculate</button>
+    <button onclick="clear_output()">Clear</button>
+    <button onclick="open_help()">Help</button> <!-- https://webmonaco.fly.dev/help -->
+  </div>
+  
+  <!-- Output Areas -->
+  <div id="progress" class=""></div>
+  <div id="notifications" class="hidden"></div>
+
+  <pre class="output" id="stdout">Program output appears here</pre>
+  <pre class="output" id="stderr">Errors and warnings appear here</pre>
+  <pre class="output" id="command">Command file appears here</pre>
+    
 </body>
 </html>
 
