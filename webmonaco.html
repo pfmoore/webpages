@@ -12,6 +12,7 @@
       --input-bg: #3b5770;
       --text-color: #ecf0f1;
       --highlight: #3498db;
+      --error: #b34040;
     }
 
     html, body {
@@ -122,18 +123,6 @@
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
     }
 
-    pre.output {
-      background: var(--input-bg);
-      color: var(--text-color);
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 0.95rem;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    
     @media (max-width: 600px) {
       /* Don't switch to one-per-line for buttons.
        * I'm not sure what the logic is for doing so, but
@@ -158,7 +147,6 @@
 
     .tab-container {
       width: 100%;
-      max-width: 800px;
       background: var(--input-bg);
       border: 1px solid color-mix(in srgb, var(--input-bg) 60%, white);
       border-radius: 6px;
@@ -194,14 +182,13 @@
     }
 
     .tab-content {
-      padding: 1em;
+      padding-left: 1em;
     }
 
     .tab-content pre {
       display: none;
       background: var(--input-bg);
       color: var(--text-color);
-      padding: 0.75rem;
       margin-bottom: 1rem;
       border-radius: 4px;
       font-family: monospace;
@@ -212,6 +199,10 @@
 
     .tab-content pre.active {
       display: block;
+    }
+
+    .tab-content pre.error {
+      color:var(--error);
     }
 
     </style>
@@ -250,10 +241,15 @@
         document.getElementById('progress').textContent = "";
         console.log(myJson)
         const div_out = document.getElementById('stdout');
-        div_out.textContent = myJson.out.content;
+        div_out.textContent = myJson.out.content.replace(/^\n*|\n*$/g, '');
         const div_err = document.getElementById('stderr');
-        div_err.textContent = myJson.err.content;
-        document.getElementById('command').textContent = myJson.command;
+        div_err.textContent = myJson.err.content.replace(/^\n*|\n*$/g, '');
+        document.getElementById('command').textContent = myJson.command.replace(/^\n*|\n*$/g, '');
+        if (myJson.err.content) {
+          selectTab("stderr");
+        } else {
+          selectTab("stdout");
+        }
         var notifications = [];
         if (myJson.status == "Timeout") {
           notifications.push("Monaco ran for too long and was terminated");
@@ -355,7 +351,7 @@
     </div>
     <div class="tab-content">
       <pre class="output active" id="stdout">Program output appears here</pre>
-      <pre class="output" id="stderr">Errors and warnings appear here</pre>
+      <pre class="output error" id="stderr">Errors and warnings appear here</pre>
       <pre class="output" id="command">Command file appears here</pre>
     </div>
   </div>
@@ -365,17 +361,27 @@
     const panes = document.querySelectorAll('.tab-content pre');
 
     buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Remove "active" from all buttons and tabs
-        buttons.forEach(b => b.classList.remove('active'));
-        panes.forEach(p => p.classList.remove('active'));
-
-        // Activate the clicked tab and its pane
-        btn.classList.add('active');
-        const target = document.getElementById(btn.dataset.target);
-        target.classList.add('active');
-      });
+      btn.addEventListener('click', () => selectTab(btn.dataset.target));
     });
+
+    // Function to programmatically select a tab by name
+    function selectTab(name) {
+      const btn = document.querySelector(`.tab-btn[data-target="${name}"]`);
+      const pane = document.getElementById(name);
+
+      if (!btn || !pane) {
+        console.warn(`Tab "${name}" not found.`);
+        return;
+      }
+
+      // Deactivate all tabs and panes
+      buttons.forEach(b => b.classList.remove('active'));
+      panes.forEach(p => p.classList.remove('active'));
+
+      // Activate the selected tab
+      btn.classList.add('active');
+      pane.classList.add('active');
+    }
   </script>    
 </body>
 </html>
