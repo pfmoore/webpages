@@ -102,7 +102,8 @@
       gap: 0.5rem;
     }
 
-    .buttons-row button {
+    .buttons-row button,
+    .buttons-row .button-link {
       padding: 0.5rem 1.2rem;
       font-size: 1rem;
       font-weight: bold;
@@ -113,13 +114,16 @@
       border-radius: 2px;
       box-shadow: inset 0 0 0 1px #1c2833;
       transition: background 0.2s, box-shadow 0.2s;
+      text-decoration: none;
     }
 
-    .buttons-row button:hover {
+    .buttons-row button:hover,
+    .buttons-row .button-link:hover {
       background-color: #486582;
     }
 
-    .buttons-row button:active {
+    .buttons-row button:active,
+    .buttons-row .button-link:active {
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
     }
 
@@ -289,7 +293,7 @@
 
     function initialise() {
       var sp = new URLSearchParams(document.location.search)
-      const selected = sp.getAll("checkboxes")
+      const selected = sp.getAll("checkbox")
       // Loop through all checkboxes in the grid
       document.querySelectorAll('.options-grid input[type="checkbox"]').forEach(cb => {
         // Get the label text associated with the checkbox
@@ -355,8 +359,9 @@
     <button onclick="submit_calculation()">Calculate</button>
     <button onclick="clear_output()">Clear</button>
     <button onclick="open_help()">Help</button> <!-- https://webmonaco.fly.dev/help -->
+    <a class="button-link" id="checkboxLink" href="" target="_blank">Page URL</a>
   </div>
-  
+
   <!-- Output Areas -->
   <div id="progress" class=""></div>
   <div id="notifications" class="hidden"></div>
@@ -403,6 +408,45 @@
 
     initialise();
 
-  </script>    
+  </script>
+  <script>
+    const baseURL = window.location.href.split('?')[0];
+    const checkboxes = document.querySelectorAll('.options-grid input[type="checkbox"]');
+    const link = document.getElementById('checkboxLink');
+
+    function make_url() {
+      const params = new URLSearchParams();
+
+      // Handle the fixed fields
+      ["options", "expression", "number"]
+          .map(el => [el, document.getElementById(el).value])
+          .filter(ev => ev[1])
+          .forEach(ev => params.append(ev[0], ev[1]));
+
+      // Get all checked checkboxes and extract their values
+      const checkedValues = Array.from(checkboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.parentElement.textContent.trim());
+      checkedValues.forEach(v => params.append('checkbox', v));
+
+      return baseURL + (params.size ? '?' + params.toString() : '');
+    }
+
+    function updateLink() {
+      // Update the link’s href
+      const fullURL = make_url();
+      link.href = fullURL;
+    }
+
+    // Attach event listeners to all checkboxes
+    checkboxes.forEach(cb => cb.addEventListener('change', updateLink));
+
+    ["options", "expression", "number"]
+      .map(el => document.getElementById(el))
+      .forEach(el => el.addEventListener('change', updateLink));
+
+    // Initialize link on page load
+    updateLink();
+  </script>
 </body>
 </html>
