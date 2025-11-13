@@ -307,6 +307,8 @@
       document.getElementById('options').value = sp.get("options");
       document.getElementById('expression').value = sp.get("expression");
       document.getElementById('number').value = sp.get("number");
+
+      if (sp.has("execute")) submit_calculation();
     }
   </script>
 </head>
