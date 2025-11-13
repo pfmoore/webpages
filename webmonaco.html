@@ -286,6 +286,24 @@
     function open_help() {
       window.location="https://webmonaco.fly.dev/help";
     }
+
+    function initialise() {
+      var sp = new URLSearchParams(document.location.search)
+      const selected = sp.getAll("checkboxes")
+      // Loop through all checkboxes in the grid
+      document.querySelectorAll('.options-grid input[type="checkbox"]').forEach(cb => {
+        // Get the label text associated with the checkbox
+        const labelText = cb.parentElement.textContent.trim();
+
+        // If the label text is in the selected array, check the box
+        if (selected.includes(labelText)) {
+          cb.checked = true;
+        }
+      });
+      document.getElementById('options').value = sp.get("options");
+      document.getElementById('expression').value = sp.get("expression");
+      document.getElementById('number').value = sp.get("number");
+    }
   </script>
 </head>
 <body>
@@ -382,6 +400,9 @@
       btn.classList.add('active');
       pane.classList.add('active');
     }
+
+    initialise();
+
   </script>    
 </body>
 </html>
