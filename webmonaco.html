@@ -287,10 +287,6 @@
         document.getElementById('command').textContent = "Command file appears here";
     }
 
-    function open_help() {
-      window.location="https://webmonaco.fly.dev/help";
-    }
-
     function initialise() {
       var sp = new URLSearchParams(document.location.search)
       const selected = sp.getAll("checkbox")
@@ -360,7 +356,7 @@
   <div class="buttons-row">
     <button onclick="submit_calculation()">Calculate</button>
     <button onclick="clear_output()">Clear</button>
-    <button onclick="open_help()">Help</button> <!-- https://webmonaco.fly.dev/help -->
+    <a class="button-link" href="https://webmonaco.fly.dev/help" target="_blank">Help</button>
     <a class="button-link" id="checkboxLink" href="" target="_blank">Page URL</a>
   </div>
 
