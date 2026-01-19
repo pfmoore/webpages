@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Splitting demo</title>
+</head>
+<body>
+  <h1>Splitting demo</h1>
+  <label>Text to split: <input id="txt" type="text" autocorrect="off" /></label>
+  <h2>Results</h2>
+  <ul id="results">
+      <li>One</li>
+      <li>Two</li>
+  </ul>
+<script>
+class TokenizeError extends Error {}
+
+function* iterTokens(str) {
+  let current = [];
+
+  let quote = null;           // null, "'" or '"'
+  const bracketStack = [];    // stack of opening brackets
+
+  const matching = {
+    ')': '(',
+    ']': '[',
+    '}': '{'
+  };
+
+  const opening = new Set(['(', '[', '{']);
+  const closing = new Set([')', ']', '}']);
+
+  const protectedState = () =>
+    quote !== null || bracketStack.length > 0;
+
+  for (let i = 0; i < str.length; i++) {
+    const ch = str[i];
+
+    // Handle quotes (only when not inside brackets)
+    if ((ch === '"' || ch === "'") && bracketStack.length === 0) {
+      if (quote === null) {
+        quote = ch;
+      } else if (quote === ch) {
+        quote = null;
+      }
+      current.push(ch);
+      continue;
+    }
+
+    // Handle brackets (only when not inside quotes)
+    if (quote === null) {
+      if (opening.has(ch)) {
+        bracketStack.push(ch);
+        current.push(ch);
+        continue;
+      } else if (closing.has(ch)) {
+        if (
+          bracketStack.length === 0 ||
+          bracketStack[bracketStack.length - 1] !== matching[ch]
+        ) {
+          throw new TokenizeError(
+            `Invalid bracket nesting at position ${i}: ${ch}`
+          );
+        }
+        bracketStack.pop();
+        current.push(ch);
+        continue;
+      }
+    }
+
+    // Handle whitespace
+    if (/\s/.test(ch) && !protectedState()) {
+      if (current.length > 0) {
+        yield current.join('');
+        current = [];
+      }
+    } else {
+      current.push(ch);
+    }
+  }
+
+  // Final checks
+  if (quote !== null) {
+    throw new TokenizeError("Unclosed quote");
+  }
+
+  if (bracketStack.length > 0) {
+    throw new TokenizeError("Unclosed bracket(s)");
+  }
+
+  if (current.length > 0) {
+    yield current.join('');
+  }
+}
+
+function splitTokens(str) {
+  return [...iterTokens(str)];
+}
+
+
+    document.getElementById("txt").addEventListener('change', (event) => {
+        var results = document.getElementById("results");
+        results.innerHTML = "";
+        try {
+            splitTokens(event.target.value).forEach(val => {
+                const li = document.createElement("li");
+                li.innerText = val;
+                results.appendChild(li);
+            });
+        } catch (error) {
+            alert(error);
+        }
+    });
+</script>
+</body>
+</html>
+
